@@ -1,25 +1,17 @@
-import React, { useState, /*useCallback*/ } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Notify from './components/Notify';
 import PhoneForm from './components/PhoneForm';
+import LoginForm from './components/LoginForm';
 import { ALL_PERSONS } from './queries';
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
+  const [token, setToken] = useState(null)
 
   const result = useQuery(ALL_PERSONS)
-
-  // const notify = useCallback(
-  //   (message) => {
-  //     setErrorMessage(message)
-  //     setTimeout(() => {
-  //       setErrorMessage(null)
-  //     }, 10000)
-  //   },
-  //   []
-  // )
 
   if (result.loading) {
     return <div>loading...</div>
@@ -30,6 +22,19 @@ const App = () => {
     setTimeout(() => {
       setErrorMessage(null)
     }, 10000)
+  }
+
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <h2>Login</h2>
+        <LoginForm
+          setToken={setToken}
+          setError={notify}
+        />
+      </div>
+    )
   }
 
   return (
